@@ -1,2 +1,2 @@
-# electron-template
-an ordinary electron-template
+# vue3-template
+an ordinary vue3 template

@@ -1,0 +1,114 @@
+// layout
+.flex {
+  display: flex;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.space-center {
+  justify-content: center;
+  align-items: center;
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+$text-style:
+  left,
+  center,
+  right,
+  justify,
+  start,
+  end
+;
+
+@each $value in $text-style {
+  .text-#{$value} {
+    text-align: $value;
+  }
+}
+
+.text-ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.text-2-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.text-3-ellipsis {
+  @extend .text-2-ellipsis;
+  -webkit-line-clamp: 3;
+}
+
+.text-4-ellipsis {
+  @extend .text-2-ellipsis;
+  -webkit-line-clamp: 4;
+}
+
+$flex-directions: (
+  col: column,
+  row: row,
+  r-col: column-reverse,
+  r-row: row-reverse
+);
+
+@each $key, $value in $flex-directions {
+  .flex-#{$key} {
+    flex-direction: $value;
+  }
+}
+
+$flex-direction-style: (
+  justify: justify-content,
+  align: align-items
+);
+
+$flex-styles: (
+  end: flex-end,
+  center: center,
+  around: space-around,
+  between: space-between
+);
+
+@each $key, $value in $flex-direction-style {
+  @each $k, $v in $flex-styles {
+    .#{$key}-#{$k} {
+      #{$value}: #{$v};
+    }
+  }
+}
+
+$distance-cates: (
+  p: padding,
+  m: margin
+);
+
+$distance-directions: (
+  l: left,
+  t: top,
+  r: right,
+  b: bottom
+);
+
+@for $num from 1 through 64 {
+  @each $key, $value in $distance-cates {
+    .#{$key}-#{$num} {
+      #{$value}: #{$num}px;
+    }
+    @each $k, $v in $distance-directions {
+      .#{$key}-#{$k}-#{$num} {
+        #{$value}-#{$v}: #{$num}px;
+      }
+    }
+  }
+}
