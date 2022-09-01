@@ -1,0 +1,32 @@
+{
+  "appId": "com.electron.template",
+  "asar": true,
+  "directories": {
+    "output": "release/${version}"
+  },
+  "files": ["dist"],
+  "extraResources": ["./config"],
+  "mac": {
+    "artifactName": "${productName}_setup_${version}_${platform}.${ext}",
+    "target": ["dmg"]
+  },
+  "win": {
+    "target": [
+      {
+        "target": "nsis",
+        "arch": ["x64"]
+      }
+    ],
+    "artifactName": "${productName}_setup_${version}_${platform}.${ext}",
+    "requestedExecutionLevel": "highestAvailable"
+  },
+  "nsis": {
+    "oneClick": false,
+    "perMachine": false,
+    "allowToChangeInstallationDirectory": true,
+    "deleteAppDataOnUninstall": true,
+    "allowElevation": true,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true
+  }
+}

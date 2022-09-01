@@ -11,5 +11,7 @@ app.use(router)
 app.use(store)
 
 router.isReady().then(() => {
-  app.mount('#app')
+  app.mount('#app').$nextTick(() => {
+    window.postMessage('removeLoading', '*')
+  })
 })

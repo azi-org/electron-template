@@ -1,12 +1,9 @@
 import {
   type Router,
   createRouter,
-  createWebHistory,
+  createWebHashHistory,
   type RouteRecordRaw,
 } from 'vue-router'
-
-import NProgress from 'nprogress'
-import 'nprogress/nprogress.css'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -17,7 +14,14 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
-    path: '/:W+',
+    path: '/404',
+    component: () => import('@/pages/notfound/index.vue'),
+    meta: {
+      title: '访问的页面找不到',
+    },
+  },
+  {
+    path: '/:pathMatch(.*)',
     component: () => import('@/pages/notfound/index.vue'),
     meta: {
       title: '访问的页面找不到',
@@ -27,16 +31,14 @@ const routes: RouteRecordRaw[] = [
 
 const router: Router = createRouter({
   routes,
-  history: createWebHistory(),
+  history: createWebHashHistory(),
 })
 
 router.beforeEach((to, from, next) => {
-  NProgress.set(0.2)
+  if (to.meta.title) {
+    document.title = `${to.meta.title} | electron-template`
+  }
   next()
-})
-
-router.afterEach(() => {
-  NProgress.done()
 })
 
 export default router
