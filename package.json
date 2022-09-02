@@ -12,12 +12,13 @@
     "postinstall": "husky install",
     "dev": "vite",
     "build:web": "rimraf ./dist && vue-tsc --noEmit && vite build",
-    "build:electron": "rimraf ./release && electron-builder",
-    "build": "npm run build:web && npm run build:electron",
+    "build:win64": "rimraf ./release && electron-builder --x64",
+    "build:win32": "rimraf ./release && electron-builder --ia32",
     "lint": "eslint --fix --ext .ts,.tsx,.json,.vue src",
     "commit": "git add . && git-cz",
     "changelog": "conventional-changelog -p gitmoji-config -i CHANGELOG.md -s",
-    "generate": "node ./src/auto/generate.cjs"
+    "generate": "node ./src/auto/generate.cjs",
+    "generate:icons": "electron-icon-builder --input=./public/AMD.png --output=./ --flatten"
   },
   "devDependencies": {
     "@commitlint/cli": "17.0.3",
@@ -37,6 +38,7 @@
     "cz-customizable": "6.9.0",
     "electron": "^20.0.2",
     "electron-builder": "^23.3.3",
+    "electron-icon-builder": "^2.0.1",
     "element-plus": "^2.2.15",
     "eslint": "^8.23.0",
     "eslint-config-prettier": "^8.5.0",

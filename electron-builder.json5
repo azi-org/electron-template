@@ -2,36 +2,59 @@
  * @see https://www.electron.build/configuration/configuration
  */
 {
-  "appId": "com.electron.template",
-  "copyright": "Copyright (c) 2022 ${author}",
-  "asar": true,
-  "directories": {
-    "output": "release/${version}"
+  appId: 'com.electron.template',
+  copyright: 'Copyright © 2022 ${author}',
+  asar: true,
+  directories: {
+    output: 'release',
   },
-  "files": [
-    "dist"
+  compression: 'store',
+  files: ['dist'],
+  extraResources: [
+    "data"
   ],
-  "mac": {
-    "artifactName": "${productName}_setup_${version}_${platform}.${ext}",
-    "target": [
-      "dmg"
-    ]
-  },
-  "win": {
-    "target": [
+  dmg: {
+    contents: [
       {
-        "target": "nsis",
-        "arch": [
-          "x64"
-        ]
-      }
+        x: 410,
+        y: 150,
+        type: 'link',
+        path: '/Applications',
+      },
+      {
+        x: 130,
+        y: 150,
+        type: 'file',
+      },
     ],
-    "artifactName": "${productName}_setup_${version}_${platform}.${ext}"
   },
-  "nsis": {
-    "oneClick": false,
-    "perMachine": false,
-    "allowToChangeInstallationDirectory": true,
-    "deleteAppDataOnUninstall": true
-  }
+  mac: {
+    icon: './icons/icon.ico',
+    target: ['dmg'],
+  },
+  linux: {
+    icon: './icons/icon.ico',
+  },
+  win: {
+    icon: './icons/icon.ico',
+    target: [
+      {
+        target: 'nsis',
+      },
+    ],
+  },
+  nsis: {
+    oneClick: false,
+    perMachine: false,
+    allowElevation: true,
+    allowToChangeInstallationDirectory: true,
+    deleteAppDataOnUninstall: true,
+    createDesktopShortcut: true,
+    createStartMenuShortcut: true,
+    shortcutName: '${productName}',
+    artifactName: '${productName}_setup_${version}_${platform}.${ext}',
+    installerIcon: './icons/icon.ico',
+    uninstallerIcon: './icons/icon.ico',
+    installerHeaderIcon: './icons/icon.ico',
+  },
 }
