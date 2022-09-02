@@ -1,15 +1,18 @@
-import { defineConfig } from 'vite'
-import Vue from '@vitejs/plugin-vue'
+// import { rmSync } from 'fs'
 import path from 'path'
-import Components from 'unplugin-vue-components/vite'
-import AutoImport from 'unplugin-auto-import/vite'
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import electron, { onstart } from 'vite-plugin-electron'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
-import Electron, { onstart } from 'vite-plugin-electron'
-import Compression from 'vite-plugin-compression'
+import autoimport from 'unplugin-auto-import/vite'
+import components from 'unplugin-vue-components/vite'
+import compression from 'vite-plugin-compression'
+import pkg from './package.json'
+
+// rmSync('dist', { recursive: true, force: true }) // v14.14.0
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: './',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
@@ -23,8 +26,8 @@ export default defineConfig({
     },
   },
   plugins: [
-    Vue(),
-    AutoImport({
+    vue(),
+    autoimport({
       dts: './src/type/auto-import.d.ts',
       imports: ['vue', 'vue-router'],
       eslintrc: {
@@ -33,46 +36,58 @@ export default defineConfig({
         globalsPropValue: true,
       },
     }),
-    Components({
-      dts: './src/type/vue-components.d.ts',
+    components({
+      dts: './src/type/vue-componets.d.ts',
       resolvers: [ElementPlusResolver()],
     }),
-    Electron({
+    compression({
+      verbose: true,
+      disable: false,
+      deleteOriginFile: false,
+      algorithm: 'gzip',
+      ext: '.gz',
+    }),
+    electron({
       main: {
         entry: 'electron/main/index.ts',
         vite: {
           build: {
-            sourcemap: 'inline',
+            // For Debug
+            sourcemap: true,
             outDir: 'dist/electron/main',
           },
+          // Will start Electron via VSCode Debug
           plugins: [process.env.VSCODE_DEBUG ? onstart() : null],
         },
       },
       preload: {
-        input: path.resolve(__dirname, 'electron/preload/index.ts'),
+        input: {
+          // You can configure multiple preload here
+          index: path.join(__dirname, 'electron/preload/index.ts'),
+        },
         vite: {
           build: {
+            // For Debug
             sourcemap: 'inline',
             outDir: 'dist/electron/preload',
           },
         },
       },
+      // Enables use of Node.js API in the Renderer-process
+      // https://github.com/electron-vite/vite-plugin-electron/tree/main/packages/electron-renderer#electron-renderervite-serve
       renderer: {},
     }),
-    Compression({
-      verbose: true,
-      disable: false,
-      deleteOriginFile: false,
-      threshold: 1024 * 10,
-      algorithm: 'gzip',
-      ext: '.gz',
-    }),
   ],
+  server: process.env.VSCODE_DEBUG
+    ? {
+        host: pkg.debug.env.VITE_DEV_SERVER_HOSTNAME,
+        port: pkg.debug.env.VITE_DEV_SERVER_PORT,
+      }
+    : undefined,
   esbuild: {
     pure: ['console.log'],
   },
   build: {
-    emptyOutDir: false, //  默认情况下，若 outDir 在 root 目录下，则 Vite 会在构建时清空该目录
     minify: true,
     assetsDir: '',
   },

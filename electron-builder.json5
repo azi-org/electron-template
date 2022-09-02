@@ -1,32 +1,37 @@
+/**
+ * @see https://www.electron.build/configuration/configuration
+ */
 {
   "appId": "com.electron.template",
+  "copyright": "Copyright (c) 2022 ${author}",
   "asar": true,
   "directories": {
     "output": "release/${version}"
   },
-  "files": ["dist"],
-  "extraResources": ["./config"],
+  "files": [
+    "dist"
+  ],
   "mac": {
     "artifactName": "${productName}_setup_${version}_${platform}.${ext}",
-    "target": ["dmg"]
+    "target": [
+      "dmg"
+    ]
   },
   "win": {
     "target": [
       {
         "target": "nsis",
-        "arch": ["x64"]
+        "arch": [
+          "x64"
+        ]
       }
     ],
-    "artifactName": "${productName}_setup_${version}_${platform}.${ext}",
-    "requestedExecutionLevel": "highestAvailable"
+    "artifactName": "${productName}_setup_${version}_${platform}.${ext}"
   },
   "nsis": {
     "oneClick": false,
     "perMachine": false,
     "allowToChangeInstallationDirectory": true,
-    "deleteAppDataOnUninstall": true,
-    "allowElevation": true,
-    "createDesktopShortcut": true,
-    "createStartMenuShortcut": true
+    "deleteAppDataOnUninstall": true
   }
 }
